@@ -1,9 +1,0 @@
----
-title: "Web 2.0 Compatible"
-linkTitle: "Compatible"
-weight: 5
-description: >
-  Object and Implementation Legacy Compatibility
----
-
-Describe compatibility of UOR implementation with current web technologies.

@@ -1,9 +1,0 @@
----
-title: "Extensible"
-linkTitle: "Extensibility"
-weight: 1
-description: >
-  Extensible object and implementation benchmarks.
----
-
-Describe extensibility for UOR

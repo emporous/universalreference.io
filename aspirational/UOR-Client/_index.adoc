@@ -1,9 +1,0 @@
----
-title: "UOR Client"
-linkTitle: "UOR Client"
-weight: 4
-description: >
-  UOR Client Docs
----
-
-Docs for UOR Client go here

@@ -1,8 +1,0 @@
----
-title: "Outcome based Criteria"
-linkTitle: "Criteria"
-weight: 6
-description: >
-  Criteria for outcome and result based measures of success.
----
-UOR Framework specifications and standards.
