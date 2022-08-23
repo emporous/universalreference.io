@@ -60,7 +60,7 @@ const config = {
         title: 'UOR Framework',
         logo: {
           alt: 'UOR',
-          src: 'img/nodes.svg',
+          src: 'img/uor-icon.png',
         },
         items: [
           {
