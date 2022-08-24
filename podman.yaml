@@ -1,0 +1,40 @@
+---
+# sudo podman play kube podman.yaml
+# sudo podman pod rm uor-framework --force
+apiVersion: v1
+kind: Pod
+metadata:
+  name: uor-framework
+  labels:
+    app: uor-framework
+  annotations:
+    io.kubernetes.cri-o.TTY/site: "false"
+    io.podman.annotations.init/site: "FALSE"
+    io.podman.annotations.label/site: disable
+    io.podman.annotations.autoremove/site: "TRUE"
+    io.podman.annotations.privileged/site: "FALSE"
+    io.podman.annotations.publish-all/site: "FALSE"
+    org.opencontainers.image.base.name/site: ghcr.io/uor-framework/site:latest
+spec:
+  containers:
+  - image: ghcr.io/uor-framework/site:latest
+    name: site
+    ports:
+    - containerPort: 3000
+      hostPort: 3000
+    securityContext:
+      capabilitieskj:
+        drop:
+        - CAP_MKNOD
+        - CAP_NET_RAW
+        - CAP_AUDIT_WRITE
+      seLinuxOptions:
+        type: spc_t
+    volumeMounts:
+    - mountPath: /src
+      name: uor-framework.github.io
+  volumes:
+  - name: uor-framework.github.io
+    hostPath:
+      type: Directory
+      path: .
