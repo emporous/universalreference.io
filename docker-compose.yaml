@@ -1,0 +1,8 @@
+version: "3.3"
+services:
+  site:
+    image: ghcr.io/uor-framework/site
+    volumes:
+      - .:/src
+    ports:
+      - "3000:3000"
