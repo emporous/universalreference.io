@@ -1,6 +1,7 @@
 # With Podman (recommended)
 # podman build --tag ghcr.io/uor-framework/site ./
-# podman run -it --rm --name hugo -p 3000:3000 --volume .:/src --security-opt label=disable --pull=never ghcr.io/uor-framework/site
+# podman run -it --rm --name site -p 3000:3000 --volume .:/src --security-opt label=disable --pull=never ghcr.io/uor-framework/site
+# docker run -it --rm --name site --publish 3000:3000 --volume .:/src --security-opt label=disable ghcr.io/uor-framework/site
 
 FROM quay.io/fedora/fedora:latest AS builder
 
