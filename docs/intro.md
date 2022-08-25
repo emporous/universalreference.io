@@ -8,7 +8,7 @@ Let's cover some basics of UOR.
 
 ## What is UOR?
 
-Universal Object Reference (UOR) provides a single format to publish, retrieve, and interact with any content. By “any content” we mean literally anything.
+Universal Object Reference (UOR) is a framework used to generalize multiple streams of content management into a single content management mechanism and strategy.
 
 ### Ok, so, what can UOR be used for?
 
@@ -18,8 +18,6 @@ Didn’t we say anything? A few examples of how UOR can be used are:
 - Hosting static or dynamic web content  
 - Labeling and Dataset management  
 - [AI model management](https://asciinema.org/a/wWCR7VY0zC97m3ibd3mKXcsJL)
-- As a relational database  
-- As an object-relational database  
 - Infrastructure provisioning and management  
 - Storage provider  
 - 3D modeling and simulation  

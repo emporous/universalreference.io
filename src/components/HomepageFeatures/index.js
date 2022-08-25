@@ -4,29 +4,37 @@ import styles from './styles.module.css';
 
 const FeatureList = [
   {
-    title: 'Adaptable',
-    Svg: require('@site/static/img/undraw_programmer_re_owql.svg').default,
+    title: 'Ubiquity',
+    Svg: require('@site/static/img/undraw_world_re_768g.svg').default,
     description: (
       <>
-        A single API that can be used to express literally anything in the universe.
+        Single API<br></br>
+        All Inclusive<br></br>
+        Portable<br></br>
+        Extendable
       </>
     ),
   },
   {
-    title: 'Any content / Anywhere',
-    Svg: require('@site/static/img/undraw_nakamoto_-2-iv6-light.svg').default,
+    title: 'Identity',
+    Svg: require('@site/static/img/undraw_fingerprint_re_uf3f.svg').default,
     description: (
       <>
-        A simple framework that enables anything in the universe to be expressed in a single format and interacted with by a single API.
+        User Owned<br></br>
+        Strongly Expressed<br></br>
+        Attribute Based Access Control
       </>
     ),
   },
   {
-    title: 'Powered by OCI Distribution',
-    Svg: require('@site/static/img/oci_icon_distribution.svg').default,
+    title: 'Security',
+    Svg: require('@site/static/img/undraw_security_on_re_e491.svg').default,
     description: (
       <>
-        Consolidate all data distribution systems into a single provider powered by OCI Registries.
+        Provenance<br></br>
+        Attestation<br></br>
+        Runtime Isolation<br></br>
+        Cryptographic Signing
       </>
     ),
   },
