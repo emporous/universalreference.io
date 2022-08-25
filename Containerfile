@@ -4,7 +4,7 @@
 
 # With Docker (Tested on MacOS)
 # docker build -f Containerfile -t ghcr.io/uor-framework/site .
-# docker run -it --rm --name site --publish 3000:3000 --volume $(pwd):/src --security-opt label=disable ghcr.io/uor-framework/site
+# docker run -it --rm --name site --publish 3000:3000 --volume $(pwd):/src ghcr.io/uor-framework/site
 
 FROM quay.io/fedora/fedora:latest AS builder
 
