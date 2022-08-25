@@ -1,7 +1,10 @@
-# With Podman (recommended)
-# podman build --tag ghcr.io/uor-framework/site ./
-# podman run -it --rm --name site -p 3000:3000 --volume .:/src --security-opt label=disable --pull=never ghcr.io/uor-framework/site
-# docker run -it --rm --name site --publish 3000:3000 --volume .:/src --security-opt label=disable ghcr.io/uor-framework/site
+# With Podman (Tested on Fedora 36)
+# podman build --tag ghcr.io/uor-framework/site .
+# podman run -it --rm --name site -p 3000:3000 --volume $(pwd):/src --security-opt label=disable --pull=never ghcr.io/uor-framework/site
+
+# With Docker (Tested on MacOS)
+# docker build -f Containerfile -t ghcr.io/uor-framework/site .
+# docker run -it --rm --name site --publish 3000:3000 --volume $(pwd):/src --security-opt label=disable ghcr.io/uor-framework/site
 
 FROM quay.io/fedora/fedora:latest AS builder
 
@@ -30,4 +33,4 @@ FROM scratch
 COPY --from=builder /rootfs /
 WORKDIR /src
 ENTRYPOINT ["bash", "-c", "npm install && npm run start"]
-LABEL org.opencontainers.image.source https://github.com/uor-framework/uor-framework.github.io
+LABEL org.opencontainers.image.source https://github.com/uor-framework/universalreference.io
