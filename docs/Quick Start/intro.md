@@ -26,7 +26,7 @@ The following tools are required in order to complete the steps illustrated in t
 
 The primary method for interacting with Emporous resources is by using the [Client](https://github.com/emporous/emporous-go). This CLI based utility includes capabilities to support assembling, publishing, retrieval and discovery.
 
-The Client can be installed from the [releases](https://github.com/emporous/emporous-go/releases) page. Download the archive that corresponds with your operating system. Extract the archive and and add the binary to your `$PATH`.
+The Client can be installed from the [releases](https://github.com/emporous/emporous-go/releases) page. Download the binary that corresponds with your operating system and add the binary to your `$PATH`.
 
 Confirm the installation was successful by invoking the client:
 
@@ -71,7 +71,7 @@ Next, create a directory called `content` which will contain two files: a text f
 mkdir content
 cd content
 echo 'aloha' > aloha.txt
-curl -LsO https://github.com/emporous/client/raw/main/testdata/fish.jpg
+curl -LsO https://raw.githubusercontent.com/emporous/emporous-go/main/test/fish.jpg
 popd
 ````
 
@@ -91,32 +91,39 @@ emporous-workspace
 
 ### Publishing a Collection
 
-With the desired set of files contained within the `emporous-workspace` directory, the next step is to publishing a collection. This process performs three actions:
+With the desired set of files contained within the `emporous-workspace` directory, the next step is to publish a collection. This process performs three actions:
 
-1. Discovers all content within the workspace
-2. Produces an OCI artifact based on the content of the collection
+1. Discovers all content within the workspace.
+2. Produces an OCI artifact based on the content of the collection.
 3. Publishes the artifact to a remote repository.
 
-To publish the collection to a remote registry, let's say that an instance of `registry:2` was running on our local machine and there is the desire to publish the collection to `localhost:5000/emporous/getting-started:latest`.
+To publish the collection to a remote registry, let's say that an instance of `registry` was running on our local machine and there is the desire to publish the collection to `localhost:5000/emporous/getting-started:latest`.
 
-Using the `push` subcommand, execute the following to publish the workspace to a remote registry. Additional options are also available for specifying the location of a file containing authentication details or communicating with an insecure or HTTP based registry if necessary. 
+You can start by spinning up an instance of `registry` using your container runtime of choice. The example below uses `docker`:
+
+```bash
+docker run -d --rm -p 5000:5000 registry
+```
+
+Using the `build` and `push` subcommands, execute the following to publish the workspace to a remote registry. Additional options are also available for specifying the location of a file containing authentication details or communicating with an insecure or HTTP based registry if necessary.
 
 ````bash
-client push emporous-workspace localhost:5000/emporous/getting-started:latest
+emporous build collection emporous-workspace localhost:5000/emporous/getting-started:latest
+emporous push --plain-http localhost:5000/emporous/getting-started:latest
 ````
 
 >Example:
 >````bash
->~$ client push emporous-workspace localhost:5000/emporous/getting-started:latest
+>~$ emporous build collection emporous-workspace localhost:5000/emporous/getting-started:latest
 >
->WARN[0000] reference for unknown type: text/plain; charset=utf-8 
->WARN[0000] reference for unknown type: text/plain; charset=utf-8 
->WARN[0000] reference for unknown type: image/jpeg       
->WARN[0000] reference for unknown type: application/vnd.emporous.config.v1+json 
->INFO[0000] Artifact sha256:43c520531d3c1f2dbebb82aaa1e55d19040075772bcdf44db32561eea73c76e9 published to localhost:5000/emporous/getting-started:latest 
+>INFO[0000] Artifact sha256:d277f57979cba85359dd221607a936bd29fcac2341bc6a55f8c827803bb9d86a built with reference name localhost:5000/emporous/getting-started:latest
+>
+>~$ emporous push --plain-http localhost:5000/emporous/getting-started:latest
+>
+>INFO[0000] Artifact sha256:d277f57979cba85359dd221607a936bd29fcac2341bc6a55f8c827803bb9d86a published to localhost:5000/emporous/getting-started:latest
 >````
 
-Do not be concerned about the `WARN` messages in the output of the _push_ execution. These are being emitted by the underlying [ORAS](https://oras.land) library the client utilizes.
+Do not be concerned about any `WARN` messages in the output of the _push_ execution. These may be emitted by the underlying [ORAS](https://oras.land) library the client utilizes.
 
 ### Exploring the Published Artifact
 
@@ -134,10 +141,11 @@ skopeo inspect --raw --tls-verify=false docker://localhost:5000/emporous/getting
 >~$ skopeo inspect --raw --tls-verify=false docker://localhost:5000/emporous/getting-started:latest | jq
 >{
 >  "schemaVersion": 2,
+>  "mediaType": "application/vnd.oci.image.manifest.v1+json",
 >  "config": {
 >    "mediaType": "application/vnd.emporous.config.v1+json",
->    "digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
->    "size": 2
+>    "digest": "sha256:ec1f8a8d6dcb53c52284e9f9e4190da1e9e71ee4a5b772a755c925cdae09c360",
+>    "size": 17
 >  },
 >  "layers": [
 >    {
@@ -169,7 +177,6 @@ skopeo inspect --raw --tls-verify=false docker://localhost:5000/emporous/getting
 >````
 >
 
-
 Reviewing the contents of the retrieved manifest, the Emporous client published four (4) key items:
 
 1. A [Manifest Config](https://oras.land/cli/3_manifest_config/)
@@ -192,26 +199,38 @@ One can easily determine that the content contains a picture due to the _mediaTy
 
 ### Retrieving a Collection
 
-Just as easy as it was to publish a collection, a collection can be retrieved from a remote locations so that the contents can be reassembled locally. First, remove the existing `emporous-workspace` directory locally if it still exists.
+Just as easy as it was to publish a collection, a collection can be retrieved from remote locations so that the contents can be reassembled locally. First, remove the existing `emporous-workspace` directory locally if it still exists.
 
 ````bash
 rm -rf emporous-workspace
 ````
 
-Then, using the `pull` subcommand of the client, specify the reference of the artifact (collection) published to the registry previously along with the location locally the contents should be saved within. To recreate the previously deleted `emporous-workspace` directory with the contents of the collection, execute the following command:
+Then, we will recreate an empty instance of the `emporous-workspace` and use the `pull` subcommand of the client, specify the reference of the artifact (collection) published to the registry previously. Since we are using an unsigned and insecure registry instance, we need to include the ``--plain-http` and `--no-verify` options:
 
-````bash
-~$ client pull localhost:5000/emporous/getting-started:latest emporous-workspace
+```bash
+mkdir emporous-workspace && cd emporous-workspace
+emporous pull --plain-http --no-verify localhost:5000/emporous/getting-started:latest
+```
 
-INFO[0000] Artifact sha256:43c520531d3c1f2dbebb82aaa1e55d19040075772bcdf44db32561eea73c76e9 from localhost:5000/emporous/getting-started:latest pulled to emporous-workspace 
-````
+Example output:
+
+>````bash
+>~$ emporous pull --plain-http --no-verify localhost:5000/emporous/getting-started:latest
+>
+>INFO[0000] Found matching digest sha256:d277f57979cba85359dd221607a936bd29fcac2341bc6a55f8c827803bb9d86a 
+>INFO[0000] Found matching digest sha256:908784d6a78ecc1e08b63aa4af486eadba500caeeb131b6406ad1bd210099386 
+>INFO[0000] Found matching digest sha256:ec1f8a8d6dcb53c52284e9f9e4190da1e9e71ee4a5b772a755c925cdae09c360 
+>INFO[0000] Found matching digest sha256:2e30f6131ce2164ed5ef017845130727291417d60a1be6fad669bdc4473289cd 
+>INFO[0000] Found matching digest sha256:a79ec113dc7ece4dee24a5ffc967b4574c22270c99e9432773b63913ac62c95e 
+>INFO[0000] Copied collection(s) to .
+>````
 
 Once again execute the `tree` command to verify the `emporous-workspace` contains the expected contents: 
 
 ````bash
-~$ tree emporous-workspace
+~$ tree
 
-emporous-workspace
+.
 ├── content
 │   ├── aloha.txt
 │   └── fish.jpg
@@ -246,9 +265,9 @@ To demonstrate how a `DataSetConfiguration` can be used to transform the attribu
 
 In total, there are three files. Let's add a separate attribute to each file.
 
-* `overview.txt` - 
-* `content/aloha.txt` -
-* `content/fish.jpg` -
+* `overview.txt` - `series: Hawaiian`
+* `content/aloha.txt` - `classification: greeting`
+* `content/fish.jpg` - `animal: fish`
 
 Mapping the desired attributes to the resources in the collection results in the following set of content that would be included within the `files` property of a `DataSetConfiguration`:
 
@@ -272,43 +291,49 @@ In addition, let's add an attribute, `content: 'true'`, to each of the files wit
     content: 'true'
 ````
 
-Putting it all together, to create a `DataSetConfiguration` resource in a file called `dataset-configuration.yaml`, execute the following:
+Putting it all together, to create a `DataSetConfiguration` resource in a file called `dataset-configuration.yaml`, execute the following in the parent directory of the `emporous-workspace`:
 
 ````yaml
 cat << EOF > dataset-configuration.yaml
 apiVersion: client.emporous.io/v1alpha1
 kind: DataSetConfiguration
-files:
-  - file: overview.txt
-    attributes:
-      series: Hawaiian
-  - file: content/aloha.txt
-    attributes:
-      classification: greeting
-  - file: content/fish.jpg
-    attributes:
-      animal: fish
-  - file: content/*
-    attributes:
-      content: 'true'
+collection:
+  files:
+    - file: overview.txt
+      attributes:
+        series: Hawaiian
+    - file: content/aloha.txt
+      attributes:
+        classification: greeting
+    - file: content/fish.jpg
+      attributes:
+        animal: fish
+    - file: content/*
+      attributes:
+        content: 'true'
 EOF
 ````
 
-Associating a `DataSetConfiguration` to a collection is achieved when pushing a workspace to a remote registry by specifying the `--dsconfig` flag and referencing the location of the resource.
+Associating a `DataSetConfiguration` to a collection is achieved when building a workspace by specifying the `--dsconfig` flag and referencing the location of the resource.
 
 ### Publishing a Collection With Attributes
 
-Publish a new tag of the collection called `dsconfig` with the additional metadata associated to the content by executing the following command:
+Build and publish a new tag of the collection called `dsconfig` with the additional metadata associated to the content by executing the following commands:
 
-````bash
-$ client push --dsconfig=dataset-configuration.yaml emporous-workspace localhost:5000/emporous/getting-started:dsconfig
+```bash
+emporous build collection emporous-workspace localhost:5000/emporous/getting-started:dsconfig --dsconfig=dataset-configuration.yaml
+emporous push --plain-http localhost:5000/emporous/getting-started:dsconfig
+```
 
-WARN[0000] reference for unknown type: text/plain; charset=utf-8 
-WARN[0000] reference for unknown type: text/plain; charset=utf-8 
-WARN[0000] reference for unknown type: image/jpeg       
-WARN[0000] reference for unknown type: application/vnd.emporous.config.v1+json 
-INFO[0000] Artifact sha256:43c520531d3c1f2dbebb82aaa1e55d19040075772bcdf44db32561eea73c76e9 published to localhost:5000/emporous/getting-started:latest 
-````
+Example output:
+
+>````bash
+>~$ emporous build collection emporous-workspace localhost:5000/emporous/getting-started:dsconfig --dsconfig=dataset-configuration.yaml
+>INFO[0000] Artifact sha256:abf36eacbe1ae024a00ea468c383bcf5cfb94895044f9001b317b7fd7fc3b1b2 built with reference name localhost:5000/emporous/getting-started:dsconfig
+>
+>~$ emporous push --plain-http localhost:5000/emporous/getting-started:dsconfig
+>INFO[0000] Artifact sha256:abf36eacbe1ae024a00ea468c383bcf5cfb94895044f9001b317b7fd7fc3b1b2 published to localhost:5000/emporous/getting-started:dsconfig
+>````
 
 Retrieve the manifest of the published artifact verify the attributes were added as annotations to the collection content as defined by the `DataSetConfiguration` resource.
 
@@ -317,10 +342,11 @@ skopeo inspect --raw --tls-verify=false docker://localhost:5000/emporous/getting
 
 {
   "schemaVersion": 2,
+  "mediaType": "application/vnd.oci.image.manifest.v1+json",
   "config": {
     "mediaType": "application/vnd.emporous.config.v1+json",
-    "digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
-    "size": 2
+    "digest": "sha256:981d355718deaeada2315aa05fc20547a0079b96510b7805c5fd63dbf6890a1b",
+    "size": 347
   },
   "layers": [
     {
@@ -328,9 +354,8 @@ skopeo inspect --raw --tls-verify=false docker://localhost:5000/emporous/getting
       "digest": "sha256:2e30f6131ce2164ed5ef017845130727291417d60a1be6fad669bdc4473289cd",
       "size": 5536,
       "annotations": {
-        "animal": "fish",
-        "content": "true",
-        "org.opencontainers.image.title": "content/fish.jpg"
+        "org.opencontainers.image.title": "content/fish.jpg",
+        "emporous.attributes": "{\"animal\":\"fish\",\"content\":\"true\"}"
       }
     },
     {
@@ -339,7 +364,7 @@ skopeo inspect --raw --tls-verify=false docker://localhost:5000/emporous/getting
       "size": 19,
       "annotations": {
         "org.opencontainers.image.title": "overview.txt",
-        "series": "Hawaiian"
+        "emporous.attributes": "{\"series\":\"Hawaiian\"}"
       }
     },
     {
@@ -347,9 +372,8 @@ skopeo inspect --raw --tls-verify=false docker://localhost:5000/emporous/getting
       "digest": "sha256:a79ec113dc7ece4dee24a5ffc967b4574c22270c99e9432773b63913ac62c95e",
       "size": 6,
       "annotations": {
-        "classification": "greeting",
-        "content": "true",
-        "org.opencontainers.image.title": "content/aloha.txt"
+        "org.opencontainers.image.title": "content/aloha.txt",
+        "emporous.attributes": "{\"classification\":\"greeting\",\"content\":\"true\"}"
       }
     }
   ]
@@ -360,23 +384,36 @@ Notice how each layer representing the collection content now has user defined a
 
 ### Filtering Content by Attributes
 
-Defining attributes within a collection enables the ability to restrict the content that is retrieved from a collection in a remote registry. The presence of the additional annotations does not change the default functionality of the `pull` subcommand within the client. However, it does provide the capability to specify the `--attributes` flag which allows for a set of key/value pairs to be defined which will attempt to match any of the annotation within the content. 
+Defining attributes within a collection enables the ability to restrict the content that is retrieved from a collection in a remote registry. The presence of the additional annotations does not change the default functionality of the `pull` subcommand within the client. However, it does provide the capability to specify the `--attributes` flag which allows for a set of key/value pairs to be defined which will attempt to match any of the annotation within the content.
 
 For example, within the previously published collection, instead of retrieving all three files, let's say that we are only concerned with assets that are classified as "content". Since the attribute `content: 'true'` was defined on the `fish.jpg` and `aloha.txt` files, we can filter out only those resources when retrieving the collection.
 
-Execute the following command to _pull_ the collection containing only "content" and store the retrieved assets in a directory called `emporous-workspace-filtered`
+First we'll create a `yaml` file with the filter we want to apply:
+
+```bash
+cat<<EOF> attributes.yaml
+kind: AttributeQuery
+apiVersion: client.emporous-framework.io/v1alpha1
+attributes:
+  content: true
+EOF
+```
+
+Now you can execute the following commands to _pull_ the collection containing only "content" and store the retrieved assets in a directory called `emporous-workspace-filtered`
 
 ````bash
-client pull --attributes=content='true' localhost:5000/emporous/getting-started:dsconfig emporous-workspace-filtered
+mkdir emporous-workspace-filtered && cd emporous-workspace-filtered
+emporous pull --plain-http --no-verify --attributes=../attributes.yaml localhost:5000/emporous/getting-started:dsconfig
+
 INFO[0000] Artifact sha256:bc94fe2c03d48e3deb2a736f9d4b9b61411d1070df844c10e6002196f099189d from localhost:5000/emporous/getting-started:dsconfig pulled to emporous-workspace-filtered 
 ````
 
 Using the `tree` command one final time, confirm that only the assets denoted by the annotation `content: 'true'` were retrieved.
 
 ````bash
-~$ tree emporous-workspace-filtered
+~$ tree
 
-emporous-workspace-filtered/
+.
 └── content
     ├── aloha.txt
     └── fish.jpg
