@@ -8,7 +8,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
   title: 'Emporous',
   tagline: 'Everything is an Object',
-  url: 'https://universalreference.io',
+  url: 'https://emporous.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',

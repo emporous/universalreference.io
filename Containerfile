@@ -33,4 +33,4 @@ FROM scratch
 COPY --from=builder /rootfs /
 WORKDIR /src
 ENTRYPOINT ["bash", "-c", "npm install && npm run start"]
-LABEL org.opencontainers.image.source https://github.com/emporous/universalreference.io
+LABEL org.opencontainers.image.source https://github.com/emporous/emporous.io

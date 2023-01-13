@@ -10,7 +10,7 @@ For this you will need git and docker or podman installed.
 * podman (Linux)
 
 ```sh
-git clone https://github.com/emporous/universalreference.io && cd universalreference.io
+git clone https://github.com/emporous/emporous.io && cd emporous.io
 ```
 
 To start with docker-compose:
