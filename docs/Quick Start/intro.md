@@ -3,14 +3,14 @@ slug: "intro"
 title: "Intro"
 tags: ["edu","docs","quickstart"]
 description: >
-  Getting Started using UOR Client.
+  Getting Started using Emporous Client.
 ---
 
-This guide provides an overview of the Universal Object Reference framework including everything that you need to get started from obtaining the necessary tooling to building, publishing and consuming content.
+This guide provides an overview of the Emporous framework including everything that you need to get started from obtaining the necessary tooling to building, publishing and consuming content.
 
 # What You Will Learn
 
-* UOR Client
+* Emporous Client
 * Collection Structure
 * Interacting with Collections
 * User Defined Attributes
@@ -22,21 +22,21 @@ The following tools are required in order to complete the steps illustrated in t
 * [skopeo](https://github.com/containers/skopeo)
 * [jq](https://stedolan.github.io/jq/manual)
 
-## UOR Client
+## Emporous Client
 
-The primary method for interacting with UOR resources is by using the [Client](https://github.com/uor-framework/client/releases). This CLI based utility includes capabilities to support assembling, publishing, retrieval and discovery.
+The primary method for interacting with Emporous resources is by using the [Client](https://github.com/emporous/emporous-go). This CLI based utility includes capabilities to support assembling, publishing, retrieval and discovery.
 
-The Client can be installed from the [releases](https://github.com/uor-framework/client/releases) page. Download the archive that corresponds with your operating system. Extract the archive and and add the binary to your `$PATH`.
+The Client can be installed from the [releases](https://github.com/emporous/emporous-go/releases) page. Download the archive that corresponds with your operating system. Extract the archive and and add the binary to your `$PATH`.
 
 Confirm the installation was successful by invoking the client:
 
 ````bash
-uor version
+emporous version
 ````
 
 Details related to the client will be presented if installation is successful.
 
-Now that the client has been installed and configured, you are ready to start interacting with UOR content.
+Now that the client has been installed and configured, you are ready to start interacting with Emporous content.
 
 ## Introduction to Collections
 
@@ -48,13 +48,13 @@ Now that we know what a Collection refers to, let's begin working through the li
 
 ### Assembling a Collection
 
-Any type of content can be represented by UOR. While the framework can be applied to a variety of use cases ranging from website content to AI model management, one of the most basic examples is managing a set of files on a file system. Files are given names, properties and organized into directories descending from a top level root. UOR makes use of similar paradigms. Content is added to a top level directory, known as a workspace. Their existence along with the relationship to other content is assembled by the client into a Directed Acyclic Graph (DAG).
+Any type of content can be represented by Emporous. While the framework can be applied to a variety of use cases ranging from website content to AI model management, one of the most basic examples is managing a set of files on a file system. Files are given names, properties and organized into directories descending from a top level root. Emporous makes use of similar paradigms. Content is added to a top level directory, known as a workspace. Their existence along with the relationship to other content is assembled by the client into a Directed Acyclic Graph (DAG).
 
-To begin, first create a directory called `uor-workspace` which will contain the content UOR will manage and enter the newly created directory:
+To begin, first create a directory called `emporous-workspace` which will contain the content Emporous will manage and enter the newly created directory:
 
 ````bash
-mkdir uor-workspace
-pushd uor-workspace
+mkdir emporous-workspace
+pushd emporous-workspace
 ````
 
 Now that a workspace is available, lets create a series of files for our file system use case. These files can be in any format, but let's create a mix of text files and jpeg photos.
@@ -71,16 +71,16 @@ Next, create a directory called `content` which will contain two files: a text f
 mkdir content
 cd content
 echo 'aloha' > aloha.txt
-curl -LsO https://github.com/uor-framework/client/raw/main/testdata/fish.jpg
+curl -LsO https://github.com/emporous/client/raw/main/testdata/fish.jpg
 popd
 ````
 
 At this point, you should have three (files) in total as depicted by the output of the `tree` command below:
 
 ````sh
-tree uor-workspace
+tree emporous-workspace
 
-uor-workspace
+emporous-workspace
 ├── content
 │   ├── aloha.txt
 │   └── fish.jpg
@@ -91,29 +91,29 @@ uor-workspace
 
 ### Publishing a Collection
 
-With the desired set of files contained within the `uor-workspace` directory, the next step is to publishing a collection. This process performs three actions:
+With the desired set of files contained within the `emporous-workspace` directory, the next step is to publishing a collection. This process performs three actions:
 
 1. Discovers all content within the workspace
 2. Produces an OCI artifact based on the content of the collection
 3. Publishes the artifact to a remote repository.
 
-To publish the collection to a remote registry, let's say that an instance of `registry:2` was running on our local machine and there is the desire to publish the collection to `localhost:5000/uor-framework/getting-started:latest`.
+To publish the collection to a remote registry, let's say that an instance of `registry:2` was running on our local machine and there is the desire to publish the collection to `localhost:5000/emporous/getting-started:latest`.
 
 Using the `push` subcommand, execute the following to publish the workspace to a remote registry. Additional options are also available for specifying the location of a file containing authentication details or communicating with an insecure or HTTP based registry if necessary. 
 
 ````bash
-client push uor-workspace localhost:5000/uor-framework/getting-started:latest
+client push emporous-workspace localhost:5000/emporous/getting-started:latest
 ````
 
 >Example:
 >````bash
->~$ client push uor-workspace localhost:5000/uor-framework/getting-started:latest
+>~$ client push emporous-workspace localhost:5000/emporous/getting-started:latest
 >
 >WARN[0000] reference for unknown type: text/plain; charset=utf-8 
 >WARN[0000] reference for unknown type: text/plain; charset=utf-8 
 >WARN[0000] reference for unknown type: image/jpeg       
->WARN[0000] reference for unknown type: application/vnd.uor.config.v1+json 
->INFO[0000] Artifact sha256:43c520531d3c1f2dbebb82aaa1e55d19040075772bcdf44db32561eea73c76e9 published to localhost:5000/uor-framework/getting-started:latest 
+>WARN[0000] reference for unknown type: application/vnd.emporous.config.v1+json 
+>INFO[0000] Artifact sha256:43c520531d3c1f2dbebb82aaa1e55d19040075772bcdf44db32561eea73c76e9 published to localhost:5000/emporous/getting-started:latest 
 >````
 
 Do not be concerned about the `WARN` messages in the output of the _push_ execution. These are being emitted by the underlying [ORAS](https://oras.land) library the client utilizes.
@@ -126,16 +126,16 @@ First, review the contents of the [manifest](https://oras.land/cli/3_manifest_co
 
 
 ````bash
-skopeo inspect --raw --tls-verify=false docker://localhost:5000/uor-framework/getting-started:latest | jq
+skopeo inspect --raw --tls-verify=false docker://localhost:5000/emporous/getting-started:latest | jq
 ````
 
 > Example:
 >````
->~$ skopeo inspect --raw --tls-verify=false docker://localhost:5000/uor-framework/getting-started:latest | jq
+>~$ skopeo inspect --raw --tls-verify=false docker://localhost:5000/emporous/getting-started:latest | jq
 >{
 >  "schemaVersion": 2,
 >  "config": {
->    "mediaType": "application/vnd.uor.config.v1+json",
+>    "mediaType": "application/vnd.emporous.config.v1+json",
 >    "digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
 >    "size": 2
 >  },
@@ -170,7 +170,7 @@ skopeo inspect --raw --tls-verify=false docker://localhost:5000/uor-framework/ge
 >
 
 
-Reviewing the contents of the retrieved manifest, the UOR client published four (4) key items:
+Reviewing the contents of the retrieved manifest, the Emporous client published four (4) key items:
 
 1. A [Manifest Config](https://oras.land/cli/3_manifest_config/)
 2. A layer for each of the assets contained within the workspace. 
@@ -192,26 +192,26 @@ One can easily determine that the content contains a picture due to the _mediaTy
 
 ### Retrieving a Collection
 
-Just as easy as it was to publish a collection, a collection can be retrieved from a remote locations so that the contents can be reassembled locally. First, remove the existing `uor-workspace` directory locally if it still exists.
+Just as easy as it was to publish a collection, a collection can be retrieved from a remote locations so that the contents can be reassembled locally. First, remove the existing `emporous-workspace` directory locally if it still exists.
 
 ````bash
-rm -rf uor-workspace
+rm -rf emporous-workspace
 ````
 
-Then, using the `pull` subcommand of the client, specify the reference of the artifact (collection) published to the registry previously along with the location locally the contents should be saved within. To recreate the previously deleted `uor-workspace` directory with the contents of the collection, execute the following command:
+Then, using the `pull` subcommand of the client, specify the reference of the artifact (collection) published to the registry previously along with the location locally the contents should be saved within. To recreate the previously deleted `emporous-workspace` directory with the contents of the collection, execute the following command:
 
 ````bash
-~$ client pull localhost:5000/uor-framework/getting-started:latest uor-workspace
+~$ client pull localhost:5000/emporous/getting-started:latest emporous-workspace
 
-INFO[0000] Artifact sha256:43c520531d3c1f2dbebb82aaa1e55d19040075772bcdf44db32561eea73c76e9 from localhost:5000/uor-framework/getting-started:latest pulled to uor-workspace 
+INFO[0000] Artifact sha256:43c520531d3c1f2dbebb82aaa1e55d19040075772bcdf44db32561eea73c76e9 from localhost:5000/emporous/getting-started:latest pulled to emporous-workspace 
 ````
 
-Once again execute the `tree` command to verify the `uor-workspace` contains the expected contents: 
+Once again execute the `tree` command to verify the `emporous-workspace` contains the expected contents: 
 
 ````bash
-~$ tree uor-workspace
+~$ tree emporous-workspace
 
-uor-workspace
+emporous-workspace
 ├── content
 │   ├── aloha.txt
 │   └── fish.jpg
@@ -220,18 +220,18 @@ uor-workspace
 1 directory, 3 files
 ````
 
-As illustrated by the response, the collection successfully reassembled the contents of the `uor-workspace` directory. This was once again all made possible because of the _annotation_ within each layer of the artifact. In the next section, we will extend this concept of using metadata contains within an object to enable additional means of classifying resources.
+As illustrated by the response, the collection successfully reassembled the contents of the `emporous-workspace` directory. This was once again all made possible because of the _annotation_ within each layer of the artifact. In the next section, we will extend this concept of using metadata contains within an object to enable additional means of classifying resources.
 
 ## User Defined Attributes
 
-By default, the UOR client attaches an annotation to each resource within a collection to associate the relative location of the content within a workspace using the key `org.opencontainers.image.title`. This annotation is one of the well know [Predefined Keys](https://github.com/opencontainers/image-spec/blob/main/annotations.md) as defined by the Open Container Initiative.
+By default, the Emporous client attaches an annotation to each resource within a collection to associate the relative location of the content within a workspace using the key `org.opencontainers.image.title`. This annotation is one of the well know [Predefined Keys](https://github.com/opencontainers/image-spec/blob/main/annotations.md) as defined by the Open Container Initiative.
 
-One of the key features of UOR is the ability to _reference_ content (hence the name Universal Object Reference) amongst a variety of different content types. This is accomplished, you guessed it, through attributes associated to each piece of content, and in this case, annotations on the layer. Aside from the default values that is produced by the UOR client, end users have the ability to define their own sets of attributes. This is accomplished using a `DataSetConfiguration`.
+One of the key features of Emporous is the ability to _reference_ content amongst a variety of different content types. This is accomplished, you guessed it, through attributes associated to each piece of content, and in this case, annotations on the layer. Aside from the default values that is produced by the Emporous client, end users have the ability to define their own sets of attributes. This is accomplished using a `DataSetConfiguration`.
 
 A `DataSetConfiguration` allows for a set of attributes to be associated with one or more resources within a collection and is represented in the following format:
 
 ````yaml
-apiVersion: client.uor-framework.io/v1alpha1
+apiVersion: client.emporous.io/v1alpha1
 kind: DataSetConfiguration
 files:
   - file: <pattern>
@@ -242,7 +242,7 @@ files:
 
 A set of attributes can be associated to a given pattern of content and multiple declarations can be present within the `DataSetConfiguration`.
 
-To demonstrate how a `DataSetConfiguration` can be used to transform the attributes of a collection, let's consider attributes that can be applied to the contents of the workspace contained in the `uor-workspace` directory.
+To demonstrate how a `DataSetConfiguration` can be used to transform the attributes of a collection, let's consider attributes that can be applied to the contents of the workspace contained in the `emporous-workspace` directory.
 
 In total, there are three files. Let's add a separate attribute to each file.
 
@@ -276,7 +276,7 @@ Putting it all together, to create a `DataSetConfiguration` resource in a file c
 
 ````yaml
 cat << EOF > dataset-configuration.yaml
-apiVersion: client.uor-framework.io/v1alpha1
+apiVersion: client.emporous.io/v1alpha1
 kind: DataSetConfiguration
 files:
   - file: overview.txt
@@ -301,24 +301,24 @@ Associating a `DataSetConfiguration` to a collection is achieved when pushing a 
 Publish a new tag of the collection called `dsconfig` with the additional metadata associated to the content by executing the following command:
 
 ````bash
-$ client push --dsconfig=dataset-configuration.yaml uor-workspace localhost:5000/uor-framework/getting-started:dsconfig
+$ client push --dsconfig=dataset-configuration.yaml emporous-workspace localhost:5000/emporous/getting-started:dsconfig
 
 WARN[0000] reference for unknown type: text/plain; charset=utf-8 
 WARN[0000] reference for unknown type: text/plain; charset=utf-8 
 WARN[0000] reference for unknown type: image/jpeg       
-WARN[0000] reference for unknown type: application/vnd.uor.config.v1+json 
-INFO[0000] Artifact sha256:43c520531d3c1f2dbebb82aaa1e55d19040075772bcdf44db32561eea73c76e9 published to localhost:5000/uor-framework/getting-started:latest 
+WARN[0000] reference for unknown type: application/vnd.emporous.config.v1+json 
+INFO[0000] Artifact sha256:43c520531d3c1f2dbebb82aaa1e55d19040075772bcdf44db32561eea73c76e9 published to localhost:5000/emporous/getting-started:latest 
 ````
 
 Retrieve the manifest of the published artifact verify the attributes were added as annotations to the collection content as defined by the `DataSetConfiguration` resource.
 
 ````bash
-skopeo inspect --raw --tls-verify=false docker://localhost:5000/uor-framework/getting-started:dsconfig | jq
+skopeo inspect --raw --tls-verify=false docker://localhost:5000/emporous/getting-started:dsconfig | jq
 
 {
   "schemaVersion": 2,
   "config": {
-    "mediaType": "application/vnd.uor.config.v1+json",
+    "mediaType": "application/vnd.emporous.config.v1+json",
     "digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
     "size": 2
   },
@@ -364,19 +364,19 @@ Defining attributes within a collection enables the ability to restrict the cont
 
 For example, within the previously published collection, instead of retrieving all three files, let's say that we are only concerned with assets that are classified as "content". Since the attribute `content: 'true'` was defined on the `fish.jpg` and `aloha.txt` files, we can filter out only those resources when retrieving the collection.
 
-Execute the following command to _pull_ the collection containing only "content" and store the retrieved assets in a directory called `uor-workspace-filtered`
+Execute the following command to _pull_ the collection containing only "content" and store the retrieved assets in a directory called `emporous-workspace-filtered`
 
 ````bash
-client pull --attributes=content='true' localhost:5000/uor-framework/getting-started:dsconfig uor-workspace-filtered
-INFO[0000] Artifact sha256:bc94fe2c03d48e3deb2a736f9d4b9b61411d1070df844c10e6002196f099189d from localhost:5000/uor-framework/getting-started:dsconfig pulled to uor-workspace-filtered 
+client pull --attributes=content='true' localhost:5000/emporous/getting-started:dsconfig emporous-workspace-filtered
+INFO[0000] Artifact sha256:bc94fe2c03d48e3deb2a736f9d4b9b61411d1070df844c10e6002196f099189d from localhost:5000/emporous/getting-started:dsconfig pulled to emporous-workspace-filtered 
 ````
 
 Using the `tree` command one final time, confirm that only the assets denoted by the annotation `content: 'true'` were retrieved.
 
 ````bash
-~$ tree uor-workspace-filtered
+~$ tree emporous-workspace-filtered
 
-uor-workspace-filtered/
+emporous-workspace-filtered/
 └── content
     ├── aloha.txt
     └── fish.jpg
@@ -388,7 +388,7 @@ For this occasion, only two files were retrieved with the file called `overview.
 
 ## Next Steps
 
-Now that you have an understanding of how to interact with the UOR framework, here are some additional areas of investigation to explore:
+Now that you have an understanding of how to interact with the Emporous framework, here are some additional areas of investigation to explore:
 
 * Explore the [ORAS project](https://oras.land)
 * Publishing a variety of content types within a collection

@@ -1,12 +1,12 @@
 ---
 # sudo podman play kube podman.yaml
-# sudo podman pod rm uor-framework --force
+# sudo podman pod rm emporous --force
 apiVersion: v1
 kind: Pod
 metadata:
-  name: uor-framework
+  name: emporous
   labels:
-    app: uor-framework
+    app: emporous
   annotations:
     io.kubernetes.cri-o.TTY/site: "false"
     io.podman.annotations.init/site: "FALSE"
@@ -14,10 +14,10 @@ metadata:
     io.podman.annotations.autoremove/site: "TRUE"
     io.podman.annotations.privileged/site: "FALSE"
     io.podman.annotations.publish-all/site: "FALSE"
-    org.opencontainers.image.base.name/site: ghcr.io/uor-framework/site:latest
+    org.opencontainers.image.base.name/site: ghcr.io/emporous/site:latest
 spec:
   containers:
-  - image: ghcr.io/uor-framework/site:latest
+  - image: ghcr.io/emporous/site:latest
     name: site
     ports:
     - containerPort: 3000
@@ -32,9 +32,9 @@ spec:
         type: spc_t
     volumeMounts:
     - mountPath: /src
-      name: uor-framework.github.io
+      name: emporous.github.io
   volumes:
-  - name: uor-framework.github.io
+  - name: emporous.github.io
     hostPath:
       type: Directory
       path: .

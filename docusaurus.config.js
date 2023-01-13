@@ -6,7 +6,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Universal Object Reference',
+  title: 'Emporous',
   tagline: 'Everything is an Object',
   url: 'https://universalreference.io',
   baseUrl: '/',
@@ -16,8 +16,8 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'uor-framework', // Usually your GitHub org/user name.
-  projectName: 'uor-framework.github.io', // Usually your repo name.
+  organizationName: 'emporous', // Usually your GitHub org/user name.
+  projectName: 'emporous.github.io', // Usually your repo name.
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
@@ -73,10 +73,10 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       navbar: {
-        title: 'UOR Framework',
+        title: 'Emporous',
         logo: {
-          alt: 'UOR',
-          src: 'img/uor-icon.png',
+          alt: 'Emporous',
+          src: 'img/emporous-icon.png',
         },
         items: [
           {
@@ -87,7 +87,7 @@ const config = {
           },
           {to: '/blog', label: 'Blog', position: 'right'},
           {
-            href: 'https://github.com/uor-framework',
+            href: 'https://github.com/emporous',
             label: 'GitHub',
             position: 'right',
           },
@@ -118,7 +118,7 @@ const config = {
               },
               {
                 label: 'Twitter',
-                href: 'https://twitter.com/UorFramework',
+                href: 'https://twitter.com/emporous',
               },
             ],
           },
@@ -136,7 +136,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} UOR Framework`,
+        copyright: `Copyright © ${new Date().getFullYear()} Emporous Framework`,
       },
       prism: {
         theme: lightCodeTheme,
