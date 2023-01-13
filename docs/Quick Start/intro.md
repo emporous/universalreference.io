@@ -6,7 +6,7 @@ description: >
   Getting Started using Emporous Client.
 ---
 
-This guide provides an overview of the Emporous framework including everything that you need to get started from obtaining the necessary tooling to building, publishing and consuming content.
+This guide provides an overview of Emporous including everything that you need to get started from obtaining the necessary tooling to building, publishing and consuming content.
 
 # What You Will Learn
 
@@ -48,7 +48,7 @@ Now that we know what a Collection refers to, let's begin working through the li
 
 ### Assembling a Collection
 
-Any type of content can be represented by Emporous. While the framework can be applied to a variety of use cases ranging from website content to AI model management, one of the most basic examples is managing a set of files on a file system. Files are given names, properties and organized into directories descending from a top level root. Emporous makes use of similar paradigms. Content is added to a top level directory, known as a workspace. Their existence along with the relationship to other content is assembled by the client into a Directed Acyclic Graph (DAG).
+Any type of content can be represented by Emporous. While the solution can be applied to a variety of use cases ranging from website content to AI model management, one of the most basic examples is managing a set of files on a file system. Files are given names, properties and organized into directories descending from a top level root. Emporous makes use of similar paradigms. Content is added to a top level directory, known as a workspace. Their existence along with the relationship to other content is assembled by the client into a Directed Acyclic Graph (DAG).
 
 To begin, first create a directory called `emporous-workspace` which will contain the content Emporous will manage and enter the newly created directory:
 
@@ -425,7 +425,7 @@ For this occasion, only two files were retrieved with the file called `overview.
 
 ## Next Steps
 
-Now that you have an understanding of how to interact with the Emporous framework, here are some additional areas of investigation to explore:
+Now that you have an understanding of how to interact with the Emporous, here are some additional areas of investigation to explore:
 
 * Explore the [ORAS project](https://oras.land)
 * Publishing a variety of content types within a collection

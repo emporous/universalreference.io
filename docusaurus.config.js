@@ -136,7 +136,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Emporous Framework`,
+        copyright: `Copyright © ${new Date().getFullYear()} Emporous`,
       },
       prism: {
         theme: lightCodeTheme,

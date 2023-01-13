@@ -1,6 +1,6 @@
 # How to Contribute
 
-Of course we welcome contributions to the Emporous Framework Documentation!
+Of course we welcome contributions to the Emporous Documentation!
 
 To get started, clone the repository and start a local build of the site.
 
