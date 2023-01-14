@@ -8,7 +8,7 @@ Let's cover some basics of Emporous.
 
 ## What is Emporous?
 
-Emporous is a universal object reference framework used to generalize multiple streams of content management into a single content management mechanism and strategy.
+Emporous is an object reference framework used to generalize multiple streams of content management into a single content management mechanism and strategy.
 
 ### Ok, so, what can Emporous be used for?
 
