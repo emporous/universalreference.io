@@ -1,0 +1,27 @@
+# Build artifacts.
+/bin/
+
+# Test artifacts.
+coverage.out
+sha256sum.txt
+**/test-output
+client-workspace
+dataset-config.yaml
+*query.yaml
+
+
+# Logs.
+
+
+# Local vendor. Remove when ready to vendor dependencies.
+/vendor/
+
+# Local
+.idea
+tags
+*.swp
+.vscode
+dist
+
+# Exercises
+exercises
