@@ -1,0 +1,3 @@
+[submodule "lib/emporous-go"]
+	path = lib/emporous-go
+	url = https://github.com/emporous/emporous-go
