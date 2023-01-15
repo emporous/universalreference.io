@@ -8,7 +8,7 @@ Let's cover some basics of Emporous.
 
 ## What is Emporous?
 
-Emporous is an object reference framework used to generalize multiple streams of content management into a single content management mechanism and strategy.
+Emporous is a universal object reference used to generalize multiple streams of content management into a single content management mechanism and strategy.
 
 ### Ok, so, what can Emporous be used for?
 
@@ -51,7 +51,7 @@ This might seem arbitrary at first glance, but it is a fundamental concept in hu
 Emporous provides a simple way to embed application logic into collections of content. These embedded algorithms are called Universal Runtime Objects (UROs). There are several benefits from this approach such as:  
 
 - Version locked compatibility between application and content.  
-- Enables Emporous to be used as a serverless framework  
+- Enables Emporous to be used as a serverless solution  
 - Enables 6G technologies: https://www.mdpi.com/2504-2289/5/4/56/htm  
 - When combined with attributes, can be used to express non-tangible concepts (to AI).  
 - Provides a decentralization framework
