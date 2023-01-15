@@ -391,7 +391,7 @@ For example, within the previously published collection, instead of retrieving a
 First we'll create a `yaml` file with the filter we want to apply:
 
 ```bash
-cat<<EOF> attributes.yaml
+cat <<EOF> attributes.yaml
 kind: AttributeQuery
 apiVersion: client.emporous.io/v1alpha1
 attributes:
