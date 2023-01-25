@@ -40,7 +40,7 @@ Now that the client has been installed and configured, you are ready to start in
 
 ## Introduction to Collections
 
-The primary purpose of the _client_ is to facilitate the interaction with _Collections_. A Collection is a set of content that is bundled together and stored as an OCI artifact. The individual resources within the artifact are decorated with additional metadata to enable filtering, discovery and retrieval. The following sections will discuss the lifecycle of a collection including mechanisms for interacting with the content. 
+The primary purpose of the _client_ is to facilitate the interaction with _Collections_. A Collection is a set of content that is bundled together and stored as an OCI artifact. The individual resources within the artifact are decorated with additional metadata to enable filtering, discovery and retrieval. The following sections will discuss the lifecycle of a collection including mechanisms for interacting with the content.
 
 ## Interacting with a Collection
 
@@ -59,7 +59,7 @@ pushd emporous-workspace
 
 Now that a workspace is available, lets create a series of files for our file system use case. These files can be in any format, but let's create a mix of text files and jpeg photos.
 
-Populate a file called `file1.txt` in the top level workspace directory with some sample content:
+Populate a file called `overview.txt` in the top level workspace directory with some sample content:
 
 ````bash
 echo 'Hawaiian Resources' > overview.txt
@@ -127,10 +127,9 @@ Do not be concerned about any `WARN` messages in the output of the _push_ execut
 
 ### Exploring the Published Artifact
 
-With the collection published, lets explore the contents of the OCI artifact that the client produced. There are a number of tools that can be used to investigate the composition of resources within an OCI registry. For readability, we will use `skopeo` and `jq`, however one could simply use `curl`` to produce the same results.
+With the collection published, lets explore the contents of the OCI artifact that the client produced. There are a number of tools that can be used to investigate the composition of resources within an OCI registry. For readability, we will use `skopeo` and `jq`, however one could simply use `curl` to produce the same results.
 
-First, review the contents of the [manifest](https://oras.land/cli/3_manifest_config/) to view each of the layers that were published. The `skopeo inspect` subcommand with the `--raw` flag will retrieve the contents of the manifest. The result can be piped to `jq` to improve the readability. Note, the `--tls-verify` flag also needs to be supplied in this instance as communication with the remote registry will utilize HTTP.  
-
+First, we will review the contents of the [manifest](https://oras.land/cli/3_manifest_config/) to view each of the layers that were published. The `skopeo inspect` subcommand with the `--raw` flag will retrieve the contents of the manifest. The result can be piped to `jq` to improve the readability. Note, the `--tls-verify=false` flag also needs to be supplied in this instance as communication with the remote registry will utilize HTTP.  
 
 ````bash
 skopeo inspect --raw --tls-verify=false docker://localhost:5000/emporous/getting-started:latest | jq
@@ -144,8 +143,8 @@ skopeo inspect --raw --tls-verify=false docker://localhost:5000/emporous/getting
 >  "mediaType": "application/vnd.oci.image.manifest.v1+json",
 >  "config": {
 >    "mediaType": "application/vnd.emporous.config.v1+json",
->    "digest": "sha256:ec1f8a8d6dcb53c52284e9f9e4190da1e9e71ee4a5b772a755c925cdae09c360",
->    "size": 17
+>    "digest": "sha256:5bd9c6ed24d5eb1396a586b700c39fb89da71d6006208ba8a99ffd04b4e28d90",
+>    "size": 173
 >  },
 >  "layers": [
 >    {
@@ -153,6 +152,7 @@ skopeo inspect --raw --tls-verify=false docker://localhost:5000/emporous/getting
 >      "digest": "sha256:2e30f6131ce2164ed5ef017845130727291417d60a1be6fad669bdc4473289cd",
 >      "size": 5536,
 >      "annotations": {
+>        "emporous.attributes": "{\"converted\":{\"org.opencontainers.image.title\":\"content/fish.jpg\"},\"unknown\":{}}",
 >        "org.opencontainers.image.title": "content/fish.jpg"
 >      }
 >    },
@@ -161,6 +161,7 @@ skopeo inspect --raw --tls-verify=false docker://localhost:5000/emporous/getting
 >      "digest": "sha256:908784d6a78ecc1e08b63aa4af486eadba500caeeb131b6406ad1bd210099386",
 >      "size": 19,
 >      "annotations": {
+>        "emporous.attributes": "{\"converted\":{\"org.opencontainers.image.title\":\"overview.txt\"},\"unknown\":{}}",
 >        "org.opencontainers.image.title": "overview.txt"
 >      }
 >    },
@@ -169,10 +170,14 @@ skopeo inspect --raw --tls-verify=false docker://localhost:5000/emporous/getting
 >      "digest": "sha256:a79ec113dc7ece4dee24a5ffc967b4574c22270c99e9432773b63913ac62c95e",
 >      "size": 6,
 >      "annotations": {
+>        "emporous.attributes": "{\"converted\":{\"org.opencontainers.image.title\":\"content/aloha.txt\"},\"unknown\":{}}",
 >        "org.opencontainers.image.title": "content/aloha.txt"
 >      }
 >    }
->  ]
+>  ],
+>  "annotations": {
+>    "emporous.attributes": "{}"
+>  }
 >}
 >````
 >
@@ -184,18 +189,18 @@ Reviewing the contents of the retrieved manifest, the Emporous client published 
 
 Each item within the workspace becomes a layer within the artifact. By inspecting each layer, observe the properties that have been associated. For example, the picture of the fish:
 
-````bash
+````json
 {
-    "mediaType": "image/jpeg",
-    "digest": "sha256:2e30f6131ce2164ed5ef017845130727291417d60a1be6fad669bdc4473289cd",
-    "size": 5536,
-    "annotations": {
-        "org.opencontainers.image.title": "content/fish.jpg"
-    }
+  "mediaType": "image/jpeg",
+  "digest": "sha256:2e30f6131ce2164ed5ef017845130727291417d60a1be6fad669bdc4473289cd",
+  "size": 5536,
+  "annotations": {
+    "emporous.attributes": "{\"converted\":{\"org.opencontainers.image.title\":\"content/fish.jpg\"},\"unknown\":{}}",
+    "org.opencontainers.image.title": "content/fish.jpg"
 }
 ````
 
-One can easily determine that the content contains a picture due to the _mediaType_ ```image/jpeg```. In addition, the client also adds the relative location within the workspace to the ```org.opencontainers.image.title``` annotation of the layer representing the primary value for the content. This is used to reconstruct the assets as the artifact as a whole is retrieved. The topic of reassembly will be covered in the next section.
+One can easily determine that the content contains a picture due to the _mediaType_ ```image/jpeg```. In addition, the client also adds the relative location within the workspace to the ```org.opencontainers.image.title``` annotation of the layer representing the primary value for the content. This is used to reconstruct the assets as the artifact as a whole is retrieved. The topic of reassembly will be covered in the next section. Attributes specific to Emporous are also added under annotations as `emporous.attributes`. We will see how we can leverage these attributes later in the [User Defined Attributes](#user-defined-attributes) section.
 
 ### Retrieving a Collection
 
@@ -239,13 +244,13 @@ Once again execute the `tree` command to verify the `emporous-workspace` contain
 1 directory, 3 files
 ````
 
-As illustrated by the response, the collection successfully reassembled the contents of the `emporous-workspace` directory. This was once again all made possible because of the _annotation_ within each layer of the artifact. In the next section, we will extend this concept of using metadata contains within an object to enable additional means of classifying resources.
+As illustrated by the response, the collection successfully reassembled the contents of the `emporous-workspace` directory. This was once again all made possible because of the _annotations_ within each layer of the artifact. In the next section, we will extend this concept of using metadata contained within an object to enable additional means of classifying resources.
 
 ## User Defined Attributes
 
 By default, the Emporous client attaches an annotation to each resource within a collection to associate the relative location of the content within a workspace using the key `org.opencontainers.image.title`. This annotation is one of the well know [Predefined Keys](https://github.com/opencontainers/image-spec/blob/main/annotations.md) as defined by the Open Container Initiative.
 
-One of the key features of Emporous is the ability to _reference_ content amongst a variety of different content types. This is accomplished, you guessed it, through attributes associated to each piece of content, and in this case, annotations on the layer. Aside from the default values that is produced by the Emporous client, end users have the ability to define their own sets of attributes. This is accomplished using a `DataSetConfiguration`.
+One of the key features of Emporous is the ability to _reference_ content amongst a variety of different content types. This is accomplished, you guessed it, through attributes associated to each piece of content, and in this case, annotations on the layer. Aside from the default values that are produced by the Emporous client, end users have the ability to define their own sets of attributes under the `emporous.attributes` key of `annotations`. This is accomplished using a `DataSetConfiguration`.
 
 A `DataSetConfiguration` allows for a set of attributes to be associated with one or more resources within a collection and is represented in the following format:
 
@@ -291,7 +296,7 @@ In addition, let's add an attribute, `content: 'true'`, to each of the files wit
     content: 'true'
 ````
 
-Putting it all together, to create a `DataSetConfiguration` resource in a file called `dataset-configuration.yaml`, execute the following in the parent directory of the `emporous-workspace`:
+Putting it all together, to create a `DataSetConfiguration` resource in a file called `dataset-configuration.yaml`, execute the following in the _parent directory_ of the `emporous-workspace`:
 
 ````yaml
 cat << EOF > dataset-configuration.yaml
@@ -345,8 +350,8 @@ skopeo inspect --raw --tls-verify=false docker://localhost:5000/emporous/getting
   "mediaType": "application/vnd.oci.image.manifest.v1+json",
   "config": {
     "mediaType": "application/vnd.emporous.config.v1+json",
-    "digest": "sha256:981d355718deaeada2315aa05fc20547a0079b96510b7805c5fd63dbf6890a1b",
-    "size": 347
+    "digest": "sha256:86ab844cd9e27c9d612e226864f1fb4c5e6b6526e7e2b4fdecf0d5ff22b3524d",
+    "size": 687
   },
   "layers": [
     {
@@ -354,8 +359,8 @@ skopeo inspect --raw --tls-verify=false docker://localhost:5000/emporous/getting
       "digest": "sha256:2e30f6131ce2164ed5ef017845130727291417d60a1be6fad669bdc4473289cd",
       "size": 5536,
       "annotations": {
-        "org.opencontainers.image.title": "content/fish.jpg",
-        "emporous.attributes": "{\"animal\":\"fish\",\"content\":\"true\"}"
+        "emporous.attributes": "{\"converted\":{\"org.opencontainers.image.title\":\"content/fish.jpg\"},\"unknown\":{\"animal\":\"fish\",\"content\":\"true\"}}",
+        "org.opencontainers.image.title": "content/fish.jpg"
       }
     },
     {
@@ -363,8 +368,8 @@ skopeo inspect --raw --tls-verify=false docker://localhost:5000/emporous/getting
       "digest": "sha256:908784d6a78ecc1e08b63aa4af486eadba500caeeb131b6406ad1bd210099386",
       "size": 19,
       "annotations": {
-        "org.opencontainers.image.title": "overview.txt",
-        "emporous.attributes": "{\"series\":\"Hawaiian\"}"
+        "emporous.attributes": "{\"converted\":{\"org.opencontainers.image.title\":\"overview.txt\"},\"unknown\":{\"series\":\"Hawaiian\"}}",
+        "org.opencontainers.image.title": "overview.txt"
       }
     },
     {
@@ -372,11 +377,14 @@ skopeo inspect --raw --tls-verify=false docker://localhost:5000/emporous/getting
       "digest": "sha256:a79ec113dc7ece4dee24a5ffc967b4574c22270c99e9432773b63913ac62c95e",
       "size": 6,
       "annotations": {
-        "org.opencontainers.image.title": "content/aloha.txt",
-        "emporous.attributes": "{\"classification\":\"greeting\",\"content\":\"true\"}"
+        "emporous.attributes": "{\"converted\":{\"org.opencontainers.image.title\":\"content/aloha.txt\"},\"unknown\":{\"classification\":\"greeting\",\"content\":\"true\"}}",
+        "org.opencontainers.image.title": "content/aloha.txt"
       }
     }
-  ]
+  ],
+  "annotations": {
+    "emporous.attributes": "{}"
+  }
 }
 ````
 
@@ -395,7 +403,8 @@ cat <<EOF> attributes.yaml
 kind: AttributeQuery
 apiVersion: client.emporous.io/v1alpha1
 attributes:
-  content: true
+  unknown:
+    content: "true"
 EOF
 ```
 
@@ -405,7 +414,11 @@ Now you can execute the following commands to _pull_ the collection containing o
 mkdir emporous-workspace-filtered && cd emporous-workspace-filtered
 emporous pull --plain-http --no-verify --attributes=../attributes.yaml localhost:5000/emporous/getting-started:dsconfig
 
-INFO[0000] Artifact sha256:bc94fe2c03d48e3deb2a736f9d4b9b61411d1070df844c10e6002196f099189d from localhost:5000/emporous/getting-started:dsconfig pulled to emporous-workspace-filtered 
+INFO[0000] Found matching digest sha256:52c283af2991332b686a5eee855e963a1199e6a2745ff5b6a78218821a6a0e4e 
+INFO[0000] Found matching digest sha256:86ab844cd9e27c9d612e226864f1fb4c5e6b6526e7e2b4fdecf0d5ff22b3524d 
+INFO[0000] Found matching digest sha256:2e30f6131ce2164ed5ef017845130727291417d60a1be6fad669bdc4473289cd 
+INFO[0000] Found matching digest sha256:a79ec113dc7ece4dee24a5ffc967b4574c22270c99e9432773b63913ac62c95e 
+INFO[0000] Copied collection(s) to .
 ````
 
 Using the `tree` command one final time, confirm that only the assets denoted by the annotation `content: 'true'` were retrieved.
