@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkuniversalreference_io=self.webpackChunkuniversalreference_io||[]).push([[4323],{9582:e=>{e.exports=JSON.parse('{"label":"docs","permalink":"/docs/tags/docs","allTagsPath":"/docs/tags","count":1,"items":[{"id":"Quick Start/intro","title":"Intro","description":"Getting Started using Emporous Client.\\n","permalink":"/docs/Quick Start/intro"}]}')}}]);

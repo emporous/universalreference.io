@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://emporous.io/blog</id>
+    <title>Emporous Blog</title>
+    <updated>2022-08-21T00:00:00.000Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://emporous.io/blog"/>
+    <subtitle>Emporous Blog</subtitle>
+    <icon>https://emporous.io/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Welcome]]></title>
+        <id>welcome</id>
+        <link href="https://emporous.io/blog/welcome"/>
+        <updated>2022-08-21T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[The Emporous community welcomes your participation! Questions, feedback, and contributions are the life blood of any new project and we hope to hear from you!]]></summary>
+        <content type="html"><![CDATA[<p>The Emporous community welcomes your participation! Questions, feedback, and contributions are the life blood of any new project and we hope to hear from you!</p><p><img loading="lazy" alt="points" src="/assets/images/points-f42ecb4bc8e4c4ed24be2404d9c63cf2.jpg" width="7001" height="4001" class="img_ev3q"></p>]]></content>
+        <author>
+            <name>Alex Flom</name>
+            <uri>https://github.com/afflom</uri>
+        </author>
+        <author>
+            <name>Jennifer Power</name>
+            <uri>https://github.com/jpower432</uri>
+        </author>
+        <author>
+            <name>Andrew Block</name>
+            <uri>https://github.com/sabre1041</uri>
+        </author>
+        <author>
+            <name>Kat Morgan</name>
+            <uri>https://github.com/usrbinkat</uri>
+        </author>
+        <category label="hello" term="hello"/>
+        <category label="emporous" term="emporous"/>
+    </entry>
+</feed>
