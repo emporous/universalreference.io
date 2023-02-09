@@ -2,62 +2,60 @@
 sidebar_position: 1
 ---
 
-# FAQ
+# Overview
 
-Let's cover some basics of Emporous.
+Emporous is an open-source toolkit for interacting with OCI-compliant container registries that is designed based on the concepts from the [Universal Object Reference Framework](UOR%20Framework/intro.md).
 
-## What is Emporous?
+With Emporous, organizations can effortlessly store, organize and search for metadata related to software artifacts along with the artifacts themselves. 
+This enables organizations to keep important information, such as trustworthiness, compliance and operational instructions, as metadata and implement policies and procedures based on it. The ability to search for attributes within the metadata makes it possible for organizations to quickly locate software artifacts, ensuring their security and compliance without manual inspection.
 
-Emporous is a universal object reference used to generalize multiple streams of content management into a single content management mechanism and strategy.
+## Our Vision
 
-### Ok, so, what can Emporous be used for?
+Through the power of metadata, we hope to enable organizations to easily manage and secure their software assets.
+We believe in technology's transformative potential and are committed to developing solutions that make it simple for organizations to maintain trust, compliance, and efficiency in their software operations.
 
-Didn’t we say anything? A few examples of how Emporous can be used are:
+## Why Emporous?
 
-- File Management  
-- Hosting static or dynamic web content  
-- Labeling and Dataset management  
-- [AI model management](https://asciinema.org/a/wWCR7VY0zC97m3ibd3mKXcsJL)
-- Infrastructure provisioning and management  
-- Storage provider  
-- 3D modeling and simulation  
-- Secure supply chain management  
-- Git provider  
-- Container image management  
-- Identity management  
-- Message broker  
-- Package management  
-- Literally anything… [You tell us](https://app.slack.com/client/T08PSQ7BQ/C034YMT1P41).
+A common challenge for software ecosystems is that they are made up of numerous components, each of which requires its own set of metadata, validation mechanisms, and storage solutions. The presence of unique metadata poses a significant challenge to discoverability and validation as organizations collect, use, and share ever-increasing amounts of data. Emporous strives to provide a consistent way to develop and use shared schemas with a single validation and storage for artifacts and metadata.
 
-### Wow, just that list is a lot. And how does Emporous accomplish such flexibility?
+Benefits:
+- Provides a real-time, shared view of artifact metadata.
+- Enables organizations to implement trust, compliance and runtime policies based on industry-standard schemas.
+- Provides a unified method to store and manage metadata and artifacts.
+- Allows organizations to easily discover software artifacts by searching for attributes within the metadata.
+- Designed to be decentralized.
 
-Emporous has 4 principles that enable truly universal support for any and all content. Those are:
+## Project Goals
 
-1. All content is formatted into a Directed Acyclic Graph (DAG).
-2. All content is a dataset - Every item within a collection of content is labeled.
-3. All links to and references to content within a collection of content are performed by an addressing scheme referred to as “Attribute Addressing”. This means that a link or reference to content within a collection is made by referring to that content’s data labels.
-4. *Time*, *space*, and *events* must be represented in order to provide truly universal capability. Time and space (state), are represented through content labels. Event representation is performed by executing embedded algorithms stored within each collection of content.
+### Standardize software artifact metadata
 
-### Did you just say “time, space, and events”?
+Support user-provided schemas.
 
-Yes, Emporous is based on a theory called Object Oriented Ontology. You can learn more about it here: https://en.wikipedia.org/wiki/Object-oriented_ontology 
+- Normalize the use of industry-standard schemas.
+- Encourage communities to develop and share schemas.
+- Allow for metadata conversions.
+- Integrate the system into existing container registry infrastructure and standards.
 
-### Why would you want to link something like web pages or any content via attributes?
+### Enhance traceability of software artifacts
 
-This might seem arbitrary at first glance, but it is a fundamental concept in human cognition. We describe a table to another person via its attributes i.e. Dark wood, 18x2in rectangular legs, round top... If we’ve been precise enough in our description, another person would be able to pick that table out of a showroom of tables. Emporous takes this concept and applies it to everything. We can then train AI models on a uniformly formatted internet containing contextually linked data. 
+Link artifacts to create metadata graphs.
 
-### What’s this about embedded algorithms?
+- Software artifact relationships to other artifacts.
+- Metadata for all artifact can be discovered and verified in the same way.
 
-Emporous provides a simple way to embed application logic into collections of content. These embedded algorithms are called Universal Runtime Objects (UROs). There are several benefits from this approach such as:  
+### Provide a decentralized storage option
+    
+Allow artifact metadata to be consumed and retrieved deterministically over a federated network of OCI-compliant registries.
 
-- Version locked compatibility between application and content.  
-- Enables Emporous to be used as a serverless solution  
-- Enables 6G technologies: https://www.mdpi.com/2504-2289/5/4/56/htm  
-- When combined with attributes, can be used to express non-tangible concepts (to AI).  
-- Provides a decentralization framework
+- Create a smart proxy system for container registries that allows metadata to be stored alongside software artifacts.
+- Implement the ability for the software artifact to self-describe using the stored metadata.
 
-### I’ve seen the word “Attribution” used in Emporous. What does that mean to Emporous?
+### Backward Compatibility
 
-Attribution in Emporous is a powerful concept. Since anything can be uniformly expressed with Emporous, we can more easily analyze the relationships between elements within an information system and derive intelligence about how those things act upon and influence each other. Those insights become deeper as more elements within an information system are formatted with Emporous. 
+Support existing ecosystems.
 
+- Store metadata for existing artifacts
+- Create tools for artifact migration
+
+![points](./points.jpg)
 
